@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["Fn","A version of the call operator that takes an immutable receiver."],["FnMut","A version of the call operator that takes a mutable receiver."],["FnOnce","A version of the call operator that takes a by-value receiver."]]});
