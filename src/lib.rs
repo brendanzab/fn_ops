@@ -15,6 +15,8 @@
 //! Temporary traits for function operator overloading, pending the stabilization of `Fn`, `FnMut`,
 //! and `FnOnce`.
 //!
+//! # Example
+//!
 //! ```rust
 //! use fn_ops::*;
 //!
@@ -47,15 +49,45 @@
 use std::ops;
 
 
+/// A version of the call operator that takes a by-value receiver.
+///
+/// This is implemented for:
+///
+/// - `std::ops::FnOnce() -> Output`
+/// - `std::ops::FnOnce(a: A) -> Output`
+/// - `std::ops::FnOnce(a: A, b: B) -> Output`
+/// - `std::ops::FnOnce(a: A, b: B, c: C) -> Output`
+/// - `std::ops::FnOnce(a: A, b: B, c: C, d: D) -> Output`
+/// - `std::ops::FnOnce(a: A, b: B, c: C, d: D, e: E) -> Output`
 pub trait FnOnce<Args> {
     type Output;
     fn call_once(self, args: Args) -> Self::Output;
 }
 
+/// A version of the call operator that takes a mutable receiver.
+///
+/// This is implemented for:
+///
+/// - `std::ops::Fn() -> Output`
+/// - `std::ops::Fn(a: A) -> Output`
+/// - `std::ops::Fn(a: A, b: B) -> Output`
+/// - `std::ops::Fn(a: A, b: B, c: C) -> Output`
+/// - `std::ops::Fn(a: A, b: B, c: C, d: D) -> Output`
+/// - `std::ops::Fn(a: A, b: B, c: C, d: D, e: E) -> Output`
 pub trait FnMut<Args>: FnOnce<Args> {
     fn call_mut(&mut self, args: Args) -> Self::Output;
 }
 
+/// A version of the call operator that takes an immutable receiver.
+///
+/// This is implemented for:
+///
+/// - `std::ops::Fn() -> Output`
+/// - `std::ops::Fn(a: A) -> Output`
+/// - `std::ops::Fn(a: A, b: B) -> Output`
+/// - `std::ops::Fn(a: A, b: B, c: C) -> Output`
+/// - `std::ops::Fn(a: A, b: B, c: C, d: D) -> Output`
+/// - `std::ops::Fn(a: A, b: B, c: C, d: D, e: E) -> Output`
 pub trait Fn<Args>: FnMut<Args> {
     fn call(&self, args: Args) -> Self::Output;
 }
