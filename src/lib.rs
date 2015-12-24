@@ -1,19 +1,33 @@
-//! Temporary function traits
+//! Temporary traits for function operator overloading, pending the stabilization of `Fn`, `FnMut`,
+//! and `FnOnce`.
 //!
-//! ```
+//! ```rust
 //! use fn_ops::*;
 //!
-//! struct Predicate(i32);
+//! struct IsMultipleOf(i32);
 //!
-//! impl FnOnce<(i32, i32)> for Predicate {
+//! impl FnOnce<(i32, i32)> for IsMultipleOf {
 //!     type Output = bool;
 //!
-//!     fn call_once(self, (x, y): (i32, i32)) -> bool {
+//!     fn call_once(self, (x, y): (i32, i32)) -> bool { self.call((x, y)) }
+//! }
+//!
+//! impl FnMut<(i32, i32)> for IsMultipleOf {
+//!     fn call_mut(&mut self, (x, y): (i32, i32)) -> bool { self.call((x, y)) }
+//! }
+//!
+//! impl Fn<(i32, i32)> for IsMultipleOf {
+//!     fn call(&self, (x, y): (i32, i32)) -> bool {
 //!         x * self.0 == y
 //!     }
 //! }
 //!
-//! assert!(Predicate(2).call_once((1, 2)))
+//! fn assert_fn<Args, F: Fn<Args, Output = bool>>(args: Args, f: F) {
+//!     assert!(f.call(args))
+//! }
+//!
+//! assert_fn((1, 2), IsMultipleOf(2));
+//! assert_fn((1, 2, 3), |x, y, z| x != y && y != z && z != x);
 //! ```
 
 use std::ops;
@@ -62,27 +76,21 @@ macro_rules! impl_fn {
         {
             type Output = Output;
             #[inline]
-            fn call_once(self, ($($arg),*,): ($($Arg),*,)) -> Self::Output {
-                self($($arg),*)
-            }
+            fn call_once(self, ($($arg),*,): ($($Arg),*,)) -> Self::Output { self($($arg),*) }
         }
 
         impl<F, $($Arg,)* Output> FnMut<($($Arg),*,)> for F where
             F: ops::FnMut($($Arg),*) -> Output,
         {
             #[inline]
-            fn call_mut(&mut self, ($($arg),*,): ($($Arg),*,)) -> Output {
-                self($($arg),*)
-            }
+            fn call_mut(&mut self, ($($arg),*,): ($($Arg),*,)) -> Output { self($($arg),*) }
         }
 
         impl<F, $($Arg,)* Output> Fn<($($Arg),*,)> for F where
             F: ops::Fn($($Arg),*) -> Output,
         {
             #[inline]
-            fn call(&self, ($($arg),*,): ($($Arg),*,)) -> Output {
-                self($($arg),*)
-            }
+            fn call(&self, ($($arg),*,): ($($Arg),*,)) -> Output { self($($arg),*) }
         }
     };
 }
