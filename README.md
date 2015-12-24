@@ -1,5 +1,12 @@
 # fn_ops
 
+[![Build Status](https://travis-ci.org/bjz/fn_ops.svg?branch=master)](https://travis-ci.org/bjz/fn_ops)
+[![Version](https://img.shields.io/crates/v/fn_ops.svg)](https://crates.io/crates/fn_ops)
+[![License](https://img.shields.io/crates/l/fn_ops.svg)](https://github.com/bjz/fn_ops/blob/master/LICENSE)
+[![Downloads](https://img.shields.io/crates/d/fn_ops.svg)](https://crates.io/crates/fn_ops)
+
+[Documentation](http://bjz.github.io/fn_ops)
+
 Temporary traits for function operator overloading, pending the stabilization of
 `Fn`, `FnMut`, and `FnOnce`.
 
