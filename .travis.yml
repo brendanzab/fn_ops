@@ -1,0 +1,30 @@
+sudo: false
+
+language: rust
+
+rust:
+  - nightly
+  - beta
+  - stable
+
+env:
+  global:
+    - TRAVIS_CARGO_NIGHTLY_FEATURE=""
+    # See 'Giving Travis Permissions' at http://www.hoverbear.org/2015/03/07/rust-travis-github-pages/
+    - secure: XmO27LquXbf0CGdIxZspqfIaCtdxmSeIL22gHZhPBuL6WCsGrms9s02mHlhIqnC1hVThpm5qXcL2KXklSEhEdq4Jej8ciVl9MbsGy1GncsxqCWSEUWs3nYB/KHMuOYiqSWM3PSayVG4XrOpf7j1OmTdCwVPGqVw7AxvDVCgeXFEyn1HO6EQTzqVcmevIFkZthD+x/uTFvQdDjZqePoGm1FVjS+fsyIp+7pQmACrhteg3blufWpHHo6wXUtJH//nggZWSB4hadKg4aeHegNlSA6MPuOiITuWoMtJesq+fnaLj3ykDc2MXyiJspFvJRWuA4afKW24TksHcVJI03hBGkUdEFnB+FNlB1BtL9/3CrzOK7kzZ39aLZ+tgeBqCDMtCkij7pDwsq+2AaNAJ/L24G1N+1pD+Ng1fEoOAlzioaD9zpN9ce7b2qsxcR/gjR7huyQ4rnNqyMlxd8WBnbAL59xaNqhEPeWEPETerv/GPd9iBLNaJBa9Na+HgImX63wmdVIlHKXyFOeQdLoTNjZ/4oxyMyPycKzbm+5pQqjXheZZVTir2WTzSx4shA/Za6vZlw95253MNjAvnkwrJmZ6ZgkixM3XFBtm3bgxaBl4xi74tYSa1WNZRxAB+KVnpSN83ykEEhl35irNLk42C9ob1g4ePfWq1EzSJ4WBYEh6TfaM=
+
+before_script:
+  - |
+      pip install 'travis-cargo<0.2' --user &&
+      export PATH=$HOME/.local/bin:$PATH
+
+script:
+  - |
+      travis-cargo build &&
+      travis-cargo test &&
+      travis-cargo bench &&
+      travis-cargo --only stable doc
+
+after_success:
+  - |
+      travis-cargo --only stable doc-upload --branch stable
