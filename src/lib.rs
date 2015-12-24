@@ -1,4 +1,20 @@
 //! Temporary function traits
+//!
+//! ```
+//! use fn_ops::*;
+//!
+//! struct Predicate(i32);
+//!
+//! impl FnOnce<(i32, i32)> for Predicate {
+//!     type Output = bool;
+//!
+//!     fn call_once(self, (x, y): (i32, i32)) -> bool {
+//!         x * self.0 == y
+//!     }
+//! }
+//!
+//! assert!(Predicate(2).call_once((1, 2)))
+//! ```
 
 use std::ops;
 
