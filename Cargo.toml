@@ -2,7 +2,7 @@
 name = "fn_ops"
 version = "0.1.0"
 authors = ["Brendan Zabarauskas <bjzaba@yahoo.com.au>"]
-license = "Apache-2.0"
+license = "MIT OR Apache-2.0"
 description = "Temporary traits for function operator overloading, pending the stabilization of `Fn`, `FnMut`, and `FnOnce`."
 
 documentation = "http://bjz.github.io/fn_ops"
